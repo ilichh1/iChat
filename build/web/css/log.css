@@ -1,0 +1,14 @@
+body{
+  background: url("http://shurl.esy.es/y") no-repeat fixed center;
+  background-size: cover;
+}
+
+/* Ilich was here */
+#server-responses {
+    display: none;
+}
+#server-responses > p {
+    margin: 0;
+    padding: 0;
+    display: block;
+} 

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Registro</title>
+        <link rel="stylesheet" href="css/bootstrap.css">
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/log.css">
+    </head>
+
+    <body>
+        <div id="loader-holder">
+            
+        </div>
+        <div class="container col-md-4">
+            <div class=" card card-login card content-center mx-auto mt-5">
+                <div class="card-header">  Registro  </div>
+                <div class="card-body">
+                    <form class="col-md-8" id="formulario-registro">
+
+                        <fieldset class="row ">
+
+                            <p class="card-text">Nombre de usuario: </p><input type="text" name="nickname" required><br>
+
+                            <p class="card-text">Contraseña: </p><input type="password" name="password" required><br>
+
+                            <p class="card-text">Confirme contraseña: </p><input type="password" name="password-conf" required><br>
+
+
+                            <button class="btn btn-primary" role="button" type="submit">Continuar</button>
+                        </fieldset>
+
+                    </form>
+                </div>
+            </div>
+            <div id="server-responses" class="alert alert-primary" role="alert"></div>
+        </div>
+
+        <script src="js/popper.js"></script>
+        <script src="js/jquery-3.2.1.min.js"></script>
+        <script src="js/bootstrap.js"></script>
+        <script>
+            window.console.log("Starting...");
+            var serverResponses = document.getElementById("server-responses");
+            var formulario = document.getElementById("formulario-registro");
+
+            var formSubmitFunc = function (e) {
+                e.preventDefault();
+                $.post(
+                        "registro",
+                        $(formulario).serialize(),
+                        function (serverResponse) {
+                            $(serverResponses).empty();
+                            if(serverResponse.registro) {
+                                serverResponses.setNewClass("alert alert-success");
+                                serverResponses.printMessage("Registro exitoso.");
+                                serverResponses.printMessage("Por favor inicie sesion.");
+                                setTimeout(function(){window.location = "log.html"},2500);
+                            } else {
+                                serverResponses.setNewClass("alert alert-warning");
+                                for(i=0; i<serverResponse.errors.length; i++) {
+                                    serverResponses.printMessage(serverResponse.errors[i]);
+                                }
+                            }
+                            $(serverResponses).show();
+                        });
+            };
+            formulario.addEventListener("submit", formSubmitFunc);
+            
+            serverResponses.setNewClass = function(newClass) {
+                $(this).removeClass();
+                $(this).addClass(newClass);
+            };
+            
+            serverResponses.printMessage = function(msg) {
+                span = document.createElement("SPAN");
+                br = document.createElement("BR");
+                span.innerHTML = msg;
+                this.appendChild(span);
+                this.appendChild(br)
+            };
+        </script>
+
+    </body>
+</html>
